@@ -1,0 +1,267 @@
+---
+title: "crossrunauto: A function for the Joint Distribution of Number of Crossings and  
+  Longest Run in Autocorrelated Bernoulli Observations"
+shorttitle: "crossrunauto"
+date: "`r Sys.Date()`"
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+    toc_depth: 3
+    fig_caption: yes
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse  = TRUE, 
+  comment   = "#>",
+  fig.width = 7.15,
+  fig.height = 3.5,
+  echo = FALSE,
+  message = FALSE)
+
+library(crossrun)
+```
+
+## Introduction
+
+For notation and setting here, see the vignette and defining articles for the package `crossrun` (references will be inserted). The functions in the package crossrun assume independent observations. Autocorrelation may lead to false alarms when using the Anhøj rules or variants of them, and it may be of some importance to investigate the extent of this problem. For that purpose we have developed a function `crossrunauto` that finds the joint distribution of C and L in a simple model for an autocorrelated sequence of Bernoulli observations. We first present the model, next we give formulas for the joint distribution in the model, present the function crossrunauto and finally show how the function may be checked by comparison with simulations.
+
+## The model
+
+The first observation has a simple Bernoulli distribution, $P (X_1=1)=p, P(X_1=0)=1-p$. We assume that the distribution of each subsequent observation is fully determined by the previous observation. Specifically, stated only for the first two observations we denote $d=P(X_2=0 \mid X_1=1)$, the "down" probability and $u=P(X_2=1 \mid X_1=0)$, the "up" probability, as shown in the following figure. 
+
+```{r echo=FALSE}
+par(mar=c(bottom=0, left=0, top=0, right=0)+.1)
+plot(x=c(0,1), y=c(0,1), col="white", axes=FALSE, xlab="", ylab="")
+within <- .1
+cex1 <- 3
+alength <- .1
+aangle <- 45
+adispl <- .05
+askewred <- .02
+xchange <- .3
+points(x=within,y=within, pch=19)
+points(x=within,y=within, pch=1, cex=cex1)
+points(x=within,y=1-within, pch=19)
+points(x=within,y=1-within, pch=1, cex=cex1)
+points(x=1-within,y=within, pch=19)
+points(x=1-within,y=within, pch=1, cex=cex1)
+points(x=1-within,y=1-within, pch=19)
+points(x=1-within,y=1-within, pch=1, cex=cex1)
+text(x=0,y=1-within,pos=4, labels="p")
+text(x=0,y=within,pos=4, labels="1-p")
+arrows(x0=within+adispl,y0=1-within,
+       x1=1-within-adispl,y1=1-within, length=alength, angle=aangle)
+arrows(x0=within+adispl,y0=within,
+       x1=1-within-adispl,y1=within, length=alength, angle=aangle)
+arrows(x0=within+adispl-askewred,y0=1-within,
+       x1=1-within-adispl+askewred,y1=within, length=alength, angle=aangle)
+arrows(x0=within+adispl-askewred,y0=within,
+       x1=1-within-adispl+askewred,y1=1-within, length=alength, angle=aangle)
+text(x=.5,y=1-within,pos=3, labels="1-d")
+text(x=.5,y=within,pos=1, labels="1-u")
+text(x=xchange,y=1-xchange,pos=3, labels="d")
+text(x=xchange,y=xchange,pos=1, labels="u")
+par(mar=c(bottom=5, left=4, top=4, right=2)+.1)
+```
+
+We first find the condition for the same distribution for all subsequent observations, this will hereafter be assumed. The condition is $P(X_2=1)=p$ which gives $$P(X_2=1 \mid X_1=1) \cdot P(X_1=1) + P(X_2=1 \mid X_1=0) \cdot P(X_1=0)=p$$
+that gives $(1-d)p+u(1-p)=p$ or simplified $pd=(1-p)u$. It is easy to check that the same condition is obtained starting with the equivalent condition $P(X_2=0)=1-p$. This condition represents a line through the origin in the (d,u) plane, with slope $\frac{p}{1-p}$ that is >1 if p>1/2 and <1 if p>1/2. The slope is 1 in the symmetric case p=1/2, in that case the down and up probabilities are equal. 
+
+The condition for independent observations is that $$P(X_2=1 \mid X_1=1)=P(X_2=1 \mid X_1=0), 1-d=u$$
+Together with the constancy condition $pd=(1-p)u$ this gives $d=1-p, u=p$. The autocorrelation k between two subsequent observations, when success is coded as 1 and failure as 0, may be computed as $k=1-\frac{d}{1-p}=1-\frac{u}{p}$. Inparticular, this is a model in which independence is equivalent to uncorrelated subsequent observations. The justification for this is as follows. $E(X_1X_2)=P(X_1X_2=1)=$ $P(X_1=1,X_2=1)= P(X_1=1) \cdot P(X_2=1 \mid X_1=1)=p \cdot(1-d)$. By the constancy assumption, $\text{Cov} (X_1,X_2)=p(1-d) - p^2=p \cdot (1-p-d)$. Finally, $k=\text{Cov} (X_1,X_2)/(p(1-p))=\frac{1-p-d}{1-p}$  
+
+The main interest in the joint distribution of C and L may be in the symmetric case, but the procedure outlined here is quite general, only assuming the constancy condition. We first investigate the possible values of the down and up probabilities. If p>0.5, the constancy condition $pd=(1-p)u$ means that $d=\frac{1-p}{p}u$. This implies that all values $0 \leq u \leq 1$ of the up probability u are possible, but if u=1 the down probability is $d=\frac{1-p}{p}$ which is the maximum possible value of the down probability if p>1/2. Similarly, if p<0.5 all values $0 \leq u \leq 1$ of the down probability d are possible, but if d=1 the up probability is $u=\frac{p}{1-p}$ which is the maximum possible value of the up probability if p>1/2. In the function crossrunauto only the unconstrained change probability is included as an argument changeprob, this is u if $p \geq 0.5$ and d if p<0.5. The other change probability is then computed from the constancy condition $pd=(1-p)u$.
+
+Concerning the autocorrelation k, all positive values are possible, and positive autocorrelations may be of primary interest in investigations using `crossrunauto`. Negative autocorrelations are also possible, but then some restrictions apply. Specifically it may be shown that the lowest possible autocorrelation is $1-\frac{1}{p}$ if $p \geq .5$ and $1-\frac{1}{1-p}$ if $p < .5$. The justification is as follows. For $p \geq .5$ the up probability u is unrestricted and u=0 corresponds to $k=1-\frac{u}{p}=1$, while u=1 corresponds to $k=1-\frac{u}{p}=1-\frac{1}{p}$. For $p < .5$ the down probability d is unrestricted and d=0 corresponds to $k=1-1-\frac{d}{1-p}=1$, while d=1 corresponds to $k=1-\frac{d}{1-p}=1-\frac{1}{1-p}$. 
+
+## The iterative procedure
+
+The iterative procedure for computing the joint probabilities for C and L in the model defined above is now nearly the same as for independent observations. We still condition on S and F, where S is the first observation. $P_n(S=1)=p, P_N)S=0)=1-p$. And we still partion by the end F of the first crossing, with values $f=2, \ldots , n$ and an additional value 1 conventially definned as no crossing. Then  $$P_n(F=1 \mid S=1)=(1-d)^{n-1}, P_n(F=1 \mid S=0)=(1-u)^{n-1}$$
+and for $f=2, \ldots , n$, $$P_n(F=f \mid S=1)=(1-d)^{f-2} \cdot d$$ $$P_n(F=f \mid S=0)=(1-u)^{f-2} \cdot u$$
+The joint distribution may now be computed by an iterative procedure closely related to the procedure for independent observations, $$P_n (L=l,C=c \mid S=1) = \sum_{f=1}^n P_n(L=l,C=c \mid S=1,F=f) \cdot P_n (F=f \mid S=1)$$ $$P_n (L=l,C=c \mid S=0) = \sum_{f=1}^n P_n(L=l,C=c \mid S=0,F=f) \cdot P_n (F=f \mid S=0)$$
+Here the last factors $P_n (F=f \mid S=1), P_n (F=f \mid S=0)$ are given above, with formulas only slightly different from the independent case. For F=1 (no crossings) the first factor $P_n(L=l,C=c \mid S=1,F=f)$ or $P_n(L=l,C=c \mid S=0,F=f)$ is nonzero only if C=0, L=n when it is 1. For $f=2, \ldots , n$ the first factor $P_n(L=l,C=c \mid S=1,F=f)$ or $P_n(L=l,C=c \mid S=0,F=f)$ is now, exactly as in the independet case, determined by the last n-f+1 observations that still constitute a sequence of the same type as the full sequence, only shorter and conditioned on the opposite starting position. For this argument the constancy assumption is necessary, each observation has the same success probability p. The times representation applies just as in the  indepenent case and with the same justification.
+
+## The function crossrunauto
+
+crossrunauto has 3 main arguments. As in crossrunbin nmax and prob are maximum sequence length and success probability. In addition there is an argument changeprob which is the unrestricted change probability, the "up" u if $p \geq 0.5$ and the down probability if $p<.05$, this is the probability for a change to the most probable event.  As in crossrunbin there are additional arguments for specifying the multiplier and the precision, these should usually be kept at their default values, and an argument prontn that may be specified as TRUE if progress information during the computation is desired. The code is as follows
+
+```{r echo=FALSE}
+library(Rmpfr)
+library(crossrun)
+```
+
+```{r echo=TRUE}
+crossrunauto <- function(nmax = 100, prob = 0.5, changeprob = 0.5,
+                         mult = 2, prec = 120, printn = FALSE) {
+  nill <- Rmpfr::mpfr(0, prec)
+  one <- Rmpfr::mpfr(1, prec)
+  half <- Rmpfr::mpfr(0.5, prec)
+  multm <- Rmpfr::mpfr(mult, prec)
+  pm <- Rmpfr::mpfr(prob, prec)
+  qm <- one - pm
+  changeprobm <- Rmpfr::mpfr(changeprob, prec)
+  if (pm>=0.5) {
+    upprobm <- changeprobm
+    downprobm <- (one-pm)*upprobm/pm
+  } else {
+    downprobm <- changeprobm
+    upprob <- pm*upprobm/(one-pm)
+  }
+  corrm <- one-upprobm/pm
+  pmultm <- pm * multm
+  qmultm <- qm * multm
+  umultm <- upprobm * multm # multiplied probability for going up
+  dmultm <- downprobm * multm  # multiplied probability for going down
+  topmultm <- (one-downprobm) * mult  # multiplied probability for staying at top
+  botmultm <- (one-upprobm) * mult  # multiplied probability for staying at bottom
+  # conditioning of S= first value, pat: above 0, pbt: below 0 suffix
+  # t: probabilities times multm^(n-1).  n=1:
+  pat <- list(pt1 = Rmpfr::mpfr2array(one, dim = c(1, 1)))
+  pbt <- list(pt1 = Rmpfr::mpfr2array(one, dim = c(1, 1)))
+  pt <- list(pt1 = Rmpfr::mpfr2array(one, dim = c(1, 1)))
+  qat <- list(pt1 = Rmpfr::mpfr2array(one, dim = c(1, 1)))
+  qbt <- list(pt1 = Rmpfr::mpfr2array(one, dim = c(1, 1)))
+  qt <- list(pt1 = Rmpfr::mpfr2array(one, dim = c(1, 1)))
+  for (nn in 2:nmax) {
+    pat[[nn]] <- Rmpfr::mpfr2array(rep(nill, nn * nn), dim = c(nn, nn))
+    pbt[[nn]] <- Rmpfr::mpfr2array(rep(nill, nn * nn), dim = c(nn, nn))
+    rownames(pat[[nn]]) <- c(0:(nn - 1))
+    rownames(pbt[[nn]]) <- c(0:(nn - 1))
+    colnames(pat[[nn]]) <- c(1:nn)
+    colnames(pbt[[nn]]) <- c(1:nn)
+    pat[[nn]][1, nn] <- (topmultm^(nn - 1))  # from cond on no crossing
+    pbt[[nn]][1, nn] <- (botmultm^(nn - 1))  # from cond on no crossing
+    for (ff in 2:nn) {
+      # from cond on first crossing at ff if last part shortest:
+      if (nn - ff + 1 <= ff - 1)
+      {
+        f1 <- ff  # unnecessary, but makes code checking easier
+        pat[[nn]][2:(nn-f1+2), f1-1] <- pat[[nn]][2:(nn-f1+2),f1-1] +
+          (topmultm^(f1-2))*dmultm*qbt[[nn-f1+1]][1:(nn-f1+1), nn-f1+1]
+        pbt[[nn]][2:(nn-f1+2), f1-1] <- pbt[[nn]][2:(nn-f1+2), f1-1] +
+          (botmultm^(f1-2))*umultm*qat[[nn-f1+1]][1:(nn-f1+1), nn-f1+1]
+      }  # end if last part shortest
+      if (nn - ff + 1 > ff - 1)
+      {
+        # if last part longest
+        f2 <- ff  # unnecessary, but makes code checking easier
+        pat[[nn]][2:(nn-f2+2), f2-1] <- pat[[nn]][2:(nn-f2+2), f2-1] +
+          (topmultm^(f2-2))*dmultm*qbt[[nn-f2+1]][1:(nn-f2+1), f2-1]
+        pat[[nn]][2:(nn-f2+2), f2:(nn-f2+1)] <- pat[[nn]][2:(nn-f2+2), f2:(nn-f2+1)] +
+          (topmultm^(f2-2))*dmultm*pbt[[nn-f2+1]][1:(nn-f2+1), f2:(nn-f2+1)]
+        pbt[[nn]][2:(nn-f2+2), f2-1] <- pbt[[nn]][2:(nn-f2+2), f2-1] +
+          (botmultm^(f2-2))*umultm*qat[[nn-f2+1]][1:(nn-f2+1), f2-1]
+        pbt[[nn]][2:(nn-f2+2), f2:(nn-f2+1)] <- pbt[[nn]][2:(nn-f2+2), f2:(nn-f2+1)] +
+          (botmultm^(f2-2))*umultm*pat[[nn-f2+1]][1:(nn-f2+1), f2:(nn-f2+1)]
+      }  # end if last part longest
+    }  # end for ff
+    pt[[nn]] <- pm * pat[[nn]] + qm * pbt[[nn]]
+    qat[[nn]] <- cumsumm(pat[[nn]])
+    qbt[[nn]] <- cumsumm(pbt[[nn]])
+    qt[[nn]] <- pm * qat[[nn]] + qm * qbt[[nn]]
+    rownames(pt[[nn]]) <- c(0:(nn - 1))
+    colnames(pt[[nn]]) <- c(1:nn)
+    rownames(qat[[nn]]) <- c(0:(nn - 1))
+    colnames(qat[[nn]]) <- c(1:nn)
+    rownames(qbt[[nn]]) <- c(0:(nn - 1))
+    rownames(qat[[nn]]) <- c(0:(nn - 1))
+    colnames(qt[[nn]]) <- c(1:nn)
+    colnames(qt[[nn]]) <- c(1:nn)
+    if (printn)
+    {
+      print(nn)
+      print(Sys.time())
+    }  # end optional timing information
+  }  # end for nn
+  names(pat) <- paste("pat", 1:nmax, sep = "")
+  names(pbt) <- paste("pbt", 1:nmax, sep = "")
+  names(pt) <- paste("pt", 1:nmax, sep = "")
+  names(qat) <- paste("qat", 1:nmax, sep = "")
+  names(qbt) <- paste("qbt", 1:nmax, sep = "")
+  names(qt) <- paste("qt", 1:nmax, sep = "")
+  return(list(pat = pat, pbt = pbt, pt = pt, qat = qat, qbt = qbt,
+              qt = qt))
+} # end function crossrunauto
+```
+
+There is a wrapper `crossrunautocorr` in which `changeprob` is replaced by an argument `autocorr` for the autocorrelatiuon parameter k. Note, however, that not all values of k are possible. Specifically, the lowest possible value of k is ... Usually positive autocorrelations 
+
+## Checking results by simulation
+
+The crossrun function `simclauto` stores results of a number of simulations in the model in a data.frame. Arguments are sereis length `nser`, number of simulations `nsim`, and the same arguments `prob` for success probability and `changeprob` for the unrestricted change probability. The code is as follows:
+
+```{r echo=TRUE}
+clf <- function(seri, type=0) {
+  rleser <- rle(seri)$lengths
+  if (type==0) res <- length(rleser) - 1
+  if (type==1) res <- max(rleser)
+  return(res)
+} # end auxiliary function clf
+simclauto <- function (nser = 100, nsim = 1e+05, prob=0.5, changeprob=0.4) {
+  if (prob>=0.5) {
+    upprob <- changeprob
+    downprob <- (1-prob)*upprob/prob
+  } else {
+    downprob <- changeprobm
+    upprob <- prob*upprob/(1-prob)
+  } # end setting downprob and upprob
+  un <- data.frame(matrix(stats::runif(nser*nsim), nrow=nsim))
+  series <- data.frame(matrix(rep(0,nser*nsim), nrow=nsim))
+  series[,1] <- as.numeric(un[,1]<=prob)
+  for (nr in 2:nser) series[,nr] <- series[,nr-1]*(un[,nr]>=downprob) +
+    (1-series[,nr-1])*(un[,nr]<=upprob)
+  res <- data.frame(matrix(rep(NA, 2*nsim), nrow = nsim))
+  names(res) <- c("nc", "lr")
+  res[,1] <- apply(series, 1, clf, type=0)
+  res[,2] <- apply(series, 1, clf, type=1)
+  return(res)
+} # end function simclauto
+```
+
+As an example the joint distribution is computed for `nmax=100, p=0.6` and `u=0.5`
+
+```{r eval=FALSE, echo=TRUE}
+cra100.6.u.5 <- crossrunauto(nmax=100, prob=0.6, changeprob=.5)$pt
+```
+
+```{r eval=TRUE, echo=FALSE}
+# cheating to save time
+load("./cra100.6.u.5.Rdata")
+```
+
+and then compareed with simulations. The cumulative distribution functions based on the joint distributions are  shown with black while the cumulative distribution functions from 100.000 simulations are shown in red.
+
+```{r eval=TRUE, echo=FALSE}
+set.seed(83938487)
+joint100.6.u.5 <- cra100.6.u.5[[100]]
+sim.6.u.5 <- simclauto(prob=0.6, changeprob=0.5)
+# cdf of C compared with simulations:
+plot(x=as.numeric(names(table(sim.6.u.5$nc))), 
+     y=(cumsum(cumsumm(joint100.6.u.5)[,100])/sum(joint100.6.u.5))[
+       as.numeric(names(table(sim.6.u.5$nc)))+1], type="l", 
+     xlab="C", ylab="CDF C")
+points(x=as.numeric(names(table(sim.6.u.5$nc))), type="l", col="red", lty="dotted",
+       y=cumsum(table(sim.6.u.5$nc))/sum(table(sim.6.u.5$nc)))
+```
+
+```{r eval=TRUE, echo=FALSE}
+plot(x=as.numeric(names(table(sim.6.u.5$lr))), 
+     y=(cumsum(cumsummcol(joint100.6.u.5)[100,])/sum(joint100.6.u.5))[
+       as.numeric(names(table(sim.6.u.5$lr)))], type="l", 
+     xlab="L", ylab="CDF L")
+points(x=as.numeric(names(table(sim.6.u.5$lr))), type="l", col="red", lty="dotted",
+       y=cumsum(table(sim.6.u.5$lr))/sum(table(sim.6.u.5$lr)))
+```
+
+The means and standard deviations of C and L, and the mean of $C \cdot L$ are also compared with simulations, with only minor discrepancies.
+
+## References
+
+Refer to the `crossrun` url https://CRAN.R-project.org/package=crossrun with the vignette, and the planned article when published.

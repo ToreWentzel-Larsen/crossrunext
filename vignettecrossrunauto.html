@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+<meta name="date" content="2018-12-01" />
+
+<title>crossrunauto: A function for the Joint Distribution of Number of Crossings and Longest Run in Autocorrelated Bernoulli Observations</title>
+
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; position: absolute; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; }
+pre.numberSource a.sourceLine:empty
+  { position: absolute; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: absolute; left: -5em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#header {
+text-align: center;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">crossrunauto: A function for the Joint Distribution of Number of Crossings and Longest Run in Autocorrelated Bernoulli Observations</h1>
+<h4 class="date"><em>2018-12-01</em></h4>
+
+
+<div id="TOC">
+<ul>
+<li><a href="#introduction">Introduction</a></li>
+<li><a href="#the-model">The model</a></li>
+<li><a href="#the-iterative-procedure">The iterative procedure</a></li>
+<li><a href="#the-function-crossrunauto">The function crossrunauto</a></li>
+<li><a href="#checking-results-by-simulation">Checking results by simulation</a></li>
+<li><a href="#references">References</a></li>
+</ul>
+</div>
+
+<div id="introduction" class="section level2">
+<h2>Introduction</h2>
+<p>For notation and setting here, see the vignette and defining articles for the package <code>crossrun</code> (references will be inserted). The functions in the package crossrun assume independent observations. Autocorrelation may lead to false alarms when using the Anhøj rules or variants of them, and it may be of some importance to investigate the extent of this problem. For that purpose we have developed a function <code>crossrunauto</code> that finds the joint distribution of C and L in a simple model for an autocorrelated sequence of Bernoulli observations. We first present the model, next we give formulas for the joint distribution in the model, present the function crossrunauto and finally show how the function may be checked by comparison with simulations.</p>
+</div>
+<div id="the-model" class="section level2">
+<h2>The model</h2>
+<p>The first observation has a simple Bernoulli distribution, <span class="math inline">\(P (X_1=1)=p, P(X_1=0)=1-p\)</span>. We assume that the distribution of each subsequent observation is fully determined by the previous observation. Specifically, stated only for the first two observations we denote <span class="math inline">\(d=P(X_2=0 \mid X_1=1)\)</span>, the “down” probability and <span class="math inline">\(u=P(X_2=1 \mid X_1=0)\)</span>, the “up” probability, as shown in the following figure.</p>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+<p>We first find the condition for the same distribution for all subsequent observations, this will hereafter be assumed. The condition is <span class="math inline">\(P(X_2=1)=p\)</span> which gives <span class="math display">\[P(X_2=1 \mid X_1=1) \cdot P(X_1=1) + P(X_2=1 \mid X_1=0) \cdot P(X_1=0)=p\]</span> that gives <span class="math inline">\((1-d)p+u(1-p)=p\)</span> or simplified <span class="math inline">\(pd=(1-p)u\)</span>. It is easy to check that the same condition is obtained starting with the equivalent condition <span class="math inline">\(P(X_2=0)=1-p\)</span>. This condition represents a line through the origin in the (d,u) plane, with slope <span class="math inline">\(\frac{p}{1-p}\)</span> that is &gt;1 if p&gt;1/2 and &lt;1 if p&gt;1/2. The slope is 1 in the symmetric case p=1/2, in that case the down and up probabilities are equal.</p>
+<p>The condition for independent observations is that <span class="math display">\[P(X_2=1 \mid X_1=1)=P(X_2=1 \mid X_1=0), 1-d=u\]</span> Together with the constancy condition <span class="math inline">\(pd=(1-p)u\)</span> this gives <span class="math inline">\(d=1-p, u=p\)</span>. The autocorrelation k between two subsequent observations, when success is coded as 1 and failure as 0, may be computed as <span class="math inline">\(k=1-\frac{d}{1-p}=1-\frac{u}{p}\)</span>. Inparticular, this is a model in which independence is equivalent to uncorrelated subsequent observations. The justification for this is as follows. <span class="math inline">\(E(X_1X_2)=P(X_1X_2=1)=\)</span> <span class="math inline">\(P(X_1=1,X_2=1)= P(X_1=1) \cdot P(X_2=1 \mid X_1=1)=p \cdot(1-d)\)</span>. By the constancy assumption, <span class="math inline">\(\text{Cov} (X_1,X_2)=p(1-d) - p^2=p \cdot (1-p-d)\)</span>. Finally, <span class="math inline">\(k=\text{Cov} (X_1,X_2)/(p(1-p))=\frac{1-p-d}{1-p}\)</span></p>
+<p>The main interest in the joint distribution of C and L may be in the symmetric case, but the procedure outlined here is quite general, only assuming the constancy condition. We first investigate the possible values of the down and up probabilities. If p&gt;0.5, the constancy condition <span class="math inline">\(pd=(1-p)u\)</span> means that <span class="math inline">\(d=\frac{1-p}{p}u\)</span>. This implies that all values <span class="math inline">\(0 \leq u \leq 1\)</span> of the up probability u are possible, but if u=1 the down probability is <span class="math inline">\(d=\frac{1-p}{p}\)</span> which is the maximum possible value of the down probability if p&gt;1/2. Similarly, if p&lt;0.5 all values <span class="math inline">\(0 \leq u \leq 1\)</span> of the down probability d are possible, but if d=1 the up probability is <span class="math inline">\(u=\frac{p}{1-p}\)</span> which is the maximum possible value of the up probability if p&gt;1/2. In the function crossrunauto only the unconstrained change probability is included as an argument changeprob, this is u if <span class="math inline">\(p \geq 0.5\)</span> and d if p&lt;0.5. The other change probability is then computed from the constancy condition <span class="math inline">\(pd=(1-p)u\)</span>.</p>
+<p>Concerning the autocorrelation k, all positive values are possible, and positive autocorrelations may be of primary interest in investigations using <code>crossrunauto</code>. Negative autocorrelations are also possible, but then some restrictions apply. Specifically it may be shown that the lowest possible autocorrelation is <span class="math inline">\(1-\frac{1}{p}\)</span> if <span class="math inline">\(p \geq .5\)</span> and <span class="math inline">\(1-\frac{1}{1-p}\)</span> if <span class="math inline">\(p &lt; .5\)</span>. The justification is as follows. For <span class="math inline">\(p \geq .5\)</span> the up probability u is unrestricted and u=0 corresponds to <span class="math inline">\(k=1-\frac{u}{p}=1\)</span>, while u=1 corresponds to <span class="math inline">\(k=1-\frac{u}{p}=1-\frac{1}{p}\)</span>. For <span class="math inline">\(p &lt; .5\)</span> the down probability d is unrestricted and d=0 corresponds to <span class="math inline">\(k=1-1-\frac{d}{1-p}=1\)</span>, while d=1 corresponds to <span class="math inline">\(k=1-\frac{d}{1-p}=1-\frac{1}{1-p}\)</span>.</p>
+</div>
+<div id="the-iterative-procedure" class="section level2">
+<h2>The iterative procedure</h2>
+<p>The iterative procedure for computing the joint probabilities for C and L in the model defined above is now nearly the same as for independent observations. We still condition on S and F, where S is the first observation. <span class="math inline">\(P_n(S=1)=p, P_N)S=0)=1-p\)</span>. And we still partion by the end F of the first crossing, with values <span class="math inline">\(f=2, \ldots , n\)</span> and an additional value 1 conventially definned as no crossing. Then <span class="math display">\[P_n(F=1 \mid S=1)=(1-d)^{n-1}, P_n(F=1 \mid S=0)=(1-u)^{n-1}\]</span> and for <span class="math inline">\(f=2, \ldots , n\)</span>, <span class="math display">\[P_n(F=f \mid S=1)=(1-d)^{f-2} \cdot d\]</span> <span class="math display">\[P_n(F=f \mid S=0)=(1-u)^{f-2} \cdot u\]</span> The joint distribution may now be computed by an iterative procedure closely related to the procedure for independent observations, <span class="math display">\[P_n (L=l,C=c \mid S=1) = \sum_{f=1}^n P_n(L=l,C=c \mid S=1,F=f) \cdot P_n (F=f \mid S=1)\]</span> <span class="math display">\[P_n (L=l,C=c \mid S=0) = \sum_{f=1}^n P_n(L=l,C=c \mid S=0,F=f) \cdot P_n (F=f \mid S=0)\]</span> Here the last factors <span class="math inline">\(P_n (F=f \mid S=1), P_n (F=f \mid S=0)\)</span> are given above, with formulas only slightly different from the independent case. For F=1 (no crossings) the first factor <span class="math inline">\(P_n(L=l,C=c \mid S=1,F=f)\)</span> or <span class="math inline">\(P_n(L=l,C=c \mid S=0,F=f)\)</span> is nonzero only if C=0, L=n when it is 1. For <span class="math inline">\(f=2, \ldots , n\)</span> the first factor <span class="math inline">\(P_n(L=l,C=c \mid S=1,F=f)\)</span> or <span class="math inline">\(P_n(L=l,C=c \mid S=0,F=f)\)</span> is now, exactly as in the independet case, determined by the last n-f+1 observations that still constitute a sequence of the same type as the full sequence, only shorter and conditioned on the opposite starting position. For this argument the constancy assumption is necessary, each observation has the same success probability p. The times representation applies just as in the indepenent case and with the same justification.</p>
+</div>
+<div id="the-function-crossrunauto" class="section level2">
+<h2>The function crossrunauto</h2>
+<p>crossrunauto has 3 main arguments. As in crossrunbin nmax and prob are maximum sequence length and success probability. In addition there is an argument changeprob which is the unrestricted change probability, the “up” u if <span class="math inline">\(p \geq 0.5\)</span> and the down probability if <span class="math inline">\(p&lt;.05\)</span>, this is the probability for a change to the most probable event. As in crossrunbin there are additional arguments for specifying the multiplier and the precision, these should usually be kept at their default values, and an argument prontn that may be specified as TRUE if progress information during the computation is desired. The code is as follows</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1">crossrunauto &lt;-<span class="st"> </span><span class="cf">function</span>(<span class="dt">nmax =</span> <span class="dv">100</span>, <span class="dt">prob =</span> <span class="fl">0.5</span>, <span class="dt">changeprob =</span> <span class="fl">0.5</span>,</a>
+<a class="sourceLine" id="cb1-2" data-line-number="2">                         <span class="dt">mult =</span> <span class="dv">2</span>, <span class="dt">prec =</span> <span class="dv">120</span>, <span class="dt">printn =</span> <span class="ot">FALSE</span>) {</a>
+<a class="sourceLine" id="cb1-3" data-line-number="3">  nill &lt;-<span class="st"> </span>Rmpfr<span class="op">::</span><span class="kw">mpfr</span>(<span class="dv">0</span>, prec)</a>
+<a class="sourceLine" id="cb1-4" data-line-number="4">  one &lt;-<span class="st"> </span>Rmpfr<span class="op">::</span><span class="kw">mpfr</span>(<span class="dv">1</span>, prec)</a>
+<a class="sourceLine" id="cb1-5" data-line-number="5">  half &lt;-<span class="st"> </span>Rmpfr<span class="op">::</span><span class="kw">mpfr</span>(<span class="fl">0.5</span>, prec)</a>
+<a class="sourceLine" id="cb1-6" data-line-number="6">  multm &lt;-<span class="st"> </span>Rmpfr<span class="op">::</span><span class="kw">mpfr</span>(mult, prec)</a>
+<a class="sourceLine" id="cb1-7" data-line-number="7">  pm &lt;-<span class="st"> </span>Rmpfr<span class="op">::</span><span class="kw">mpfr</span>(prob, prec)</a>
+<a class="sourceLine" id="cb1-8" data-line-number="8">  qm &lt;-<span class="st"> </span>one <span class="op">-</span><span class="st"> </span>pm</a>
+<a class="sourceLine" id="cb1-9" data-line-number="9">  changeprobm &lt;-<span class="st"> </span>Rmpfr<span class="op">::</span><span class="kw">mpfr</span>(changeprob, prec)</a>
+<a class="sourceLine" id="cb1-10" data-line-number="10">  <span class="cf">if</span> (pm<span class="op">&gt;=</span><span class="fl">0.5</span>) {</a>
+<a class="sourceLine" id="cb1-11" data-line-number="11">    upprobm &lt;-<span class="st"> </span>changeprobm</a>
+<a class="sourceLine" id="cb1-12" data-line-number="12">    downprobm &lt;-<span class="st"> </span>(one<span class="op">-</span>pm)<span class="op">*</span>upprobm<span class="op">/</span>pm</a>
+<a class="sourceLine" id="cb1-13" data-line-number="13">  } <span class="cf">else</span> {</a>
+<a class="sourceLine" id="cb1-14" data-line-number="14">    downprobm &lt;-<span class="st"> </span>changeprobm</a>
+<a class="sourceLine" id="cb1-15" data-line-number="15">    upprob &lt;-<span class="st"> </span>pm<span class="op">*</span>upprobm<span class="op">/</span>(one<span class="op">-</span>pm)</a>
+<a class="sourceLine" id="cb1-16" data-line-number="16">  }</a>
+<a class="sourceLine" id="cb1-17" data-line-number="17">  corrm &lt;-<span class="st"> </span>one<span class="op">-</span>upprobm<span class="op">/</span>pm</a>
+<a class="sourceLine" id="cb1-18" data-line-number="18">  pmultm &lt;-<span class="st"> </span>pm <span class="op">*</span><span class="st"> </span>multm</a>
+<a class="sourceLine" id="cb1-19" data-line-number="19">  qmultm &lt;-<span class="st"> </span>qm <span class="op">*</span><span class="st"> </span>multm</a>
+<a class="sourceLine" id="cb1-20" data-line-number="20">  umultm &lt;-<span class="st"> </span>upprobm <span class="op">*</span><span class="st"> </span>multm <span class="co"># multiplied probability for going up</span></a>
+<a class="sourceLine" id="cb1-21" data-line-number="21">  dmultm &lt;-<span class="st"> </span>downprobm <span class="op">*</span><span class="st"> </span>multm  <span class="co"># multiplied probability for going down</span></a>
+<a class="sourceLine" id="cb1-22" data-line-number="22">  topmultm &lt;-<span class="st"> </span>(one<span class="op">-</span>downprobm) <span class="op">*</span><span class="st"> </span>mult  <span class="co"># multiplied probability for staying at top</span></a>
+<a class="sourceLine" id="cb1-23" data-line-number="23">  botmultm &lt;-<span class="st"> </span>(one<span class="op">-</span>upprobm) <span class="op">*</span><span class="st"> </span>mult  <span class="co"># multiplied probability for staying at bottom</span></a>
+<a class="sourceLine" id="cb1-24" data-line-number="24">  <span class="co"># conditioning of S= first value, pat: above 0, pbt: below 0 suffix</span></a>
+<a class="sourceLine" id="cb1-25" data-line-number="25">  <span class="co"># t: probabilities times multm^(n-1).  n=1:</span></a>
+<a class="sourceLine" id="cb1-26" data-line-number="26">  pat &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">pt1 =</span> Rmpfr<span class="op">::</span><span class="kw">mpfr2array</span>(one, <span class="dt">dim =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">1</span>)))</a>
+<a class="sourceLine" id="cb1-27" data-line-number="27">  pbt &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">pt1 =</span> Rmpfr<span class="op">::</span><span class="kw">mpfr2array</span>(one, <span class="dt">dim =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">1</span>)))</a>
+<a class="sourceLine" id="cb1-28" data-line-number="28">  pt &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">pt1 =</span> Rmpfr<span class="op">::</span><span class="kw">mpfr2array</span>(one, <span class="dt">dim =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">1</span>)))</a>
+<a class="sourceLine" id="cb1-29" data-line-number="29">  qat &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">pt1 =</span> Rmpfr<span class="op">::</span><span class="kw">mpfr2array</span>(one, <span class="dt">dim =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">1</span>)))</a>
+<a class="sourceLine" id="cb1-30" data-line-number="30">  qbt &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">pt1 =</span> Rmpfr<span class="op">::</span><span class="kw">mpfr2array</span>(one, <span class="dt">dim =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">1</span>)))</a>
+<a class="sourceLine" id="cb1-31" data-line-number="31">  qt &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">pt1 =</span> Rmpfr<span class="op">::</span><span class="kw">mpfr2array</span>(one, <span class="dt">dim =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">1</span>)))</a>
+<a class="sourceLine" id="cb1-32" data-line-number="32">  <span class="cf">for</span> (nn <span class="cf">in</span> <span class="dv">2</span><span class="op">:</span>nmax) {</a>
+<a class="sourceLine" id="cb1-33" data-line-number="33">    pat[[nn]] &lt;-<span class="st"> </span>Rmpfr<span class="op">::</span><span class="kw">mpfr2array</span>(<span class="kw">rep</span>(nill, nn <span class="op">*</span><span class="st"> </span>nn), <span class="dt">dim =</span> <span class="kw">c</span>(nn, nn))</a>
+<a class="sourceLine" id="cb1-34" data-line-number="34">    pbt[[nn]] &lt;-<span class="st"> </span>Rmpfr<span class="op">::</span><span class="kw">mpfr2array</span>(<span class="kw">rep</span>(nill, nn <span class="op">*</span><span class="st"> </span>nn), <span class="dt">dim =</span> <span class="kw">c</span>(nn, nn))</a>
+<a class="sourceLine" id="cb1-35" data-line-number="35">    <span class="kw">rownames</span>(pat[[nn]]) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">0</span><span class="op">:</span>(nn <span class="op">-</span><span class="st"> </span><span class="dv">1</span>))</a>
+<a class="sourceLine" id="cb1-36" data-line-number="36">    <span class="kw">rownames</span>(pbt[[nn]]) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">0</span><span class="op">:</span>(nn <span class="op">-</span><span class="st"> </span><span class="dv">1</span>))</a>
+<a class="sourceLine" id="cb1-37" data-line-number="37">    <span class="kw">colnames</span>(pat[[nn]]) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span>nn)</a>
+<a class="sourceLine" id="cb1-38" data-line-number="38">    <span class="kw">colnames</span>(pbt[[nn]]) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span>nn)</a>
+<a class="sourceLine" id="cb1-39" data-line-number="39">    pat[[nn]][<span class="dv">1</span>, nn] &lt;-<span class="st"> </span>(topmultm<span class="op">^</span>(nn <span class="op">-</span><span class="st"> </span><span class="dv">1</span>))  <span class="co"># from cond on no crossing</span></a>
+<a class="sourceLine" id="cb1-40" data-line-number="40">    pbt[[nn]][<span class="dv">1</span>, nn] &lt;-<span class="st"> </span>(botmultm<span class="op">^</span>(nn <span class="op">-</span><span class="st"> </span><span class="dv">1</span>))  <span class="co"># from cond on no crossing</span></a>
+<a class="sourceLine" id="cb1-41" data-line-number="41">    <span class="cf">for</span> (ff <span class="cf">in</span> <span class="dv">2</span><span class="op">:</span>nn) {</a>
+<a class="sourceLine" id="cb1-42" data-line-number="42">      <span class="co"># from cond on first crossing at ff if last part shortest:</span></a>
+<a class="sourceLine" id="cb1-43" data-line-number="43">      <span class="cf">if</span> (nn <span class="op">-</span><span class="st"> </span>ff <span class="op">+</span><span class="st"> </span><span class="dv">1</span> <span class="op">&lt;=</span><span class="st"> </span>ff <span class="op">-</span><span class="st"> </span><span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb1-44" data-line-number="44">      {</a>
+<a class="sourceLine" id="cb1-45" data-line-number="45">        f1 &lt;-<span class="st"> </span>ff  <span class="co"># unnecessary, but makes code checking easier</span></a>
+<a class="sourceLine" id="cb1-46" data-line-number="46">        pat[[nn]][<span class="dv">2</span><span class="op">:</span>(nn<span class="op">-</span>f1<span class="op">+</span><span class="dv">2</span>), f1<span class="dv">-1</span>] &lt;-<span class="st"> </span>pat[[nn]][<span class="dv">2</span><span class="op">:</span>(nn<span class="op">-</span>f1<span class="op">+</span><span class="dv">2</span>),f1<span class="dv">-1</span>] <span class="op">+</span></a>
+<a class="sourceLine" id="cb1-47" data-line-number="47"><span class="st">          </span>(topmultm<span class="op">^</span>(f1<span class="dv">-2</span>))<span class="op">*</span>dmultm<span class="op">*</span>qbt[[nn<span class="op">-</span>f1<span class="op">+</span><span class="dv">1</span>]][<span class="dv">1</span><span class="op">:</span>(nn<span class="op">-</span>f1<span class="op">+</span><span class="dv">1</span>), nn<span class="op">-</span>f1<span class="op">+</span><span class="dv">1</span>]</a>
+<a class="sourceLine" id="cb1-48" data-line-number="48">        pbt[[nn]][<span class="dv">2</span><span class="op">:</span>(nn<span class="op">-</span>f1<span class="op">+</span><span class="dv">2</span>), f1<span class="dv">-1</span>] &lt;-<span class="st"> </span>pbt[[nn]][<span class="dv">2</span><span class="op">:</span>(nn<span class="op">-</span>f1<span class="op">+</span><span class="dv">2</span>), f1<span class="dv">-1</span>] <span class="op">+</span></a>
+<a class="sourceLine" id="cb1-49" data-line-number="49"><span class="st">          </span>(botmultm<span class="op">^</span>(f1<span class="dv">-2</span>))<span class="op">*</span>umultm<span class="op">*</span>qat[[nn<span class="op">-</span>f1<span class="op">+</span><span class="dv">1</span>]][<span class="dv">1</span><span class="op">:</span>(nn<span class="op">-</span>f1<span class="op">+</span><span class="dv">1</span>), nn<span class="op">-</span>f1<span class="op">+</span><span class="dv">1</span>]</a>
+<a class="sourceLine" id="cb1-50" data-line-number="50">      }  <span class="co"># end if last part shortest</span></a>
+<a class="sourceLine" id="cb1-51" data-line-number="51">      <span class="cf">if</span> (nn <span class="op">-</span><span class="st"> </span>ff <span class="op">+</span><span class="st"> </span><span class="dv">1</span> <span class="op">&gt;</span><span class="st"> </span>ff <span class="op">-</span><span class="st"> </span><span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb1-52" data-line-number="52">      {</a>
+<a class="sourceLine" id="cb1-53" data-line-number="53">        <span class="co"># if last part longest</span></a>
+<a class="sourceLine" id="cb1-54" data-line-number="54">        f2 &lt;-<span class="st"> </span>ff  <span class="co"># unnecessary, but makes code checking easier</span></a>
+<a class="sourceLine" id="cb1-55" data-line-number="55">        pat[[nn]][<span class="dv">2</span><span class="op">:</span>(nn<span class="op">-</span>f2<span class="op">+</span><span class="dv">2</span>), f2<span class="dv">-1</span>] &lt;-<span class="st"> </span>pat[[nn]][<span class="dv">2</span><span class="op">:</span>(nn<span class="op">-</span>f2<span class="op">+</span><span class="dv">2</span>), f2<span class="dv">-1</span>] <span class="op">+</span></a>
+<a class="sourceLine" id="cb1-56" data-line-number="56"><span class="st">          </span>(topmultm<span class="op">^</span>(f2<span class="dv">-2</span>))<span class="op">*</span>dmultm<span class="op">*</span>qbt[[nn<span class="op">-</span>f2<span class="op">+</span><span class="dv">1</span>]][<span class="dv">1</span><span class="op">:</span>(nn<span class="op">-</span>f2<span class="op">+</span><span class="dv">1</span>), f2<span class="dv">-1</span>]</a>
+<a class="sourceLine" id="cb1-57" data-line-number="57">        pat[[nn]][<span class="dv">2</span><span class="op">:</span>(nn<span class="op">-</span>f2<span class="op">+</span><span class="dv">2</span>), f2<span class="op">:</span>(nn<span class="op">-</span>f2<span class="op">+</span><span class="dv">1</span>)] &lt;-<span class="st"> </span>pat[[nn]][<span class="dv">2</span><span class="op">:</span>(nn<span class="op">-</span>f2<span class="op">+</span><span class="dv">2</span>), f2<span class="op">:</span>(nn<span class="op">-</span>f2<span class="op">+</span><span class="dv">1</span>)] <span class="op">+</span></a>
+<a class="sourceLine" id="cb1-58" data-line-number="58"><span class="st">          </span>(topmultm<span class="op">^</span>(f2<span class="dv">-2</span>))<span class="op">*</span>dmultm<span class="op">*</span>pbt[[nn<span class="op">-</span>f2<span class="op">+</span><span class="dv">1</span>]][<span class="dv">1</span><span class="op">:</span>(nn<span class="op">-</span>f2<span class="op">+</span><span class="dv">1</span>), f2<span class="op">:</span>(nn<span class="op">-</span>f2<span class="op">+</span><span class="dv">1</span>)]</a>
+<a class="sourceLine" id="cb1-59" data-line-number="59">        pbt[[nn]][<span class="dv">2</span><span class="op">:</span>(nn<span class="op">-</span>f2<span class="op">+</span><span class="dv">2</span>), f2<span class="dv">-1</span>] &lt;-<span class="st"> </span>pbt[[nn]][<span class="dv">2</span><span class="op">:</span>(nn<span class="op">-</span>f2<span class="op">+</span><span class="dv">2</span>), f2<span class="dv">-1</span>] <span class="op">+</span></a>
+<a class="sourceLine" id="cb1-60" data-line-number="60"><span class="st">          </span>(botmultm<span class="op">^</span>(f2<span class="dv">-2</span>))<span class="op">*</span>umultm<span class="op">*</span>qat[[nn<span class="op">-</span>f2<span class="op">+</span><span class="dv">1</span>]][<span class="dv">1</span><span class="op">:</span>(nn<span class="op">-</span>f2<span class="op">+</span><span class="dv">1</span>), f2<span class="dv">-1</span>]</a>
+<a class="sourceLine" id="cb1-61" data-line-number="61">        pbt[[nn]][<span class="dv">2</span><span class="op">:</span>(nn<span class="op">-</span>f2<span class="op">+</span><span class="dv">2</span>), f2<span class="op">:</span>(nn<span class="op">-</span>f2<span class="op">+</span><span class="dv">1</span>)] &lt;-<span class="st"> </span>pbt[[nn]][<span class="dv">2</span><span class="op">:</span>(nn<span class="op">-</span>f2<span class="op">+</span><span class="dv">2</span>), f2<span class="op">:</span>(nn<span class="op">-</span>f2<span class="op">+</span><span class="dv">1</span>)] <span class="op">+</span></a>
+<a class="sourceLine" id="cb1-62" data-line-number="62"><span class="st">          </span>(botmultm<span class="op">^</span>(f2<span class="dv">-2</span>))<span class="op">*</span>umultm<span class="op">*</span>pat[[nn<span class="op">-</span>f2<span class="op">+</span><span class="dv">1</span>]][<span class="dv">1</span><span class="op">:</span>(nn<span class="op">-</span>f2<span class="op">+</span><span class="dv">1</span>), f2<span class="op">:</span>(nn<span class="op">-</span>f2<span class="op">+</span><span class="dv">1</span>)]</a>
+<a class="sourceLine" id="cb1-63" data-line-number="63">      }  <span class="co"># end if last part longest</span></a>
+<a class="sourceLine" id="cb1-64" data-line-number="64">    }  <span class="co"># end for ff</span></a>
+<a class="sourceLine" id="cb1-65" data-line-number="65">    pt[[nn]] &lt;-<span class="st"> </span>pm <span class="op">*</span><span class="st"> </span>pat[[nn]] <span class="op">+</span><span class="st"> </span>qm <span class="op">*</span><span class="st"> </span>pbt[[nn]]</a>
+<a class="sourceLine" id="cb1-66" data-line-number="66">    qat[[nn]] &lt;-<span class="st"> </span><span class="kw">cumsumm</span>(pat[[nn]])</a>
+<a class="sourceLine" id="cb1-67" data-line-number="67">    qbt[[nn]] &lt;-<span class="st"> </span><span class="kw">cumsumm</span>(pbt[[nn]])</a>
+<a class="sourceLine" id="cb1-68" data-line-number="68">    qt[[nn]] &lt;-<span class="st"> </span>pm <span class="op">*</span><span class="st"> </span>qat[[nn]] <span class="op">+</span><span class="st"> </span>qm <span class="op">*</span><span class="st"> </span>qbt[[nn]]</a>
+<a class="sourceLine" id="cb1-69" data-line-number="69">    <span class="kw">rownames</span>(pt[[nn]]) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">0</span><span class="op">:</span>(nn <span class="op">-</span><span class="st"> </span><span class="dv">1</span>))</a>
+<a class="sourceLine" id="cb1-70" data-line-number="70">    <span class="kw">colnames</span>(pt[[nn]]) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span>nn)</a>
+<a class="sourceLine" id="cb1-71" data-line-number="71">    <span class="kw">rownames</span>(qat[[nn]]) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">0</span><span class="op">:</span>(nn <span class="op">-</span><span class="st"> </span><span class="dv">1</span>))</a>
+<a class="sourceLine" id="cb1-72" data-line-number="72">    <span class="kw">colnames</span>(qat[[nn]]) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span>nn)</a>
+<a class="sourceLine" id="cb1-73" data-line-number="73">    <span class="kw">rownames</span>(qbt[[nn]]) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">0</span><span class="op">:</span>(nn <span class="op">-</span><span class="st"> </span><span class="dv">1</span>))</a>
+<a class="sourceLine" id="cb1-74" data-line-number="74">    <span class="kw">rownames</span>(qat[[nn]]) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">0</span><span class="op">:</span>(nn <span class="op">-</span><span class="st"> </span><span class="dv">1</span>))</a>
+<a class="sourceLine" id="cb1-75" data-line-number="75">    <span class="kw">colnames</span>(qt[[nn]]) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span>nn)</a>
+<a class="sourceLine" id="cb1-76" data-line-number="76">    <span class="kw">colnames</span>(qt[[nn]]) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span>nn)</a>
+<a class="sourceLine" id="cb1-77" data-line-number="77">    <span class="cf">if</span> (printn)</a>
+<a class="sourceLine" id="cb1-78" data-line-number="78">    {</a>
+<a class="sourceLine" id="cb1-79" data-line-number="79">      <span class="kw">print</span>(nn)</a>
+<a class="sourceLine" id="cb1-80" data-line-number="80">      <span class="kw">print</span>(<span class="kw">Sys.time</span>())</a>
+<a class="sourceLine" id="cb1-81" data-line-number="81">    }  <span class="co"># end optional timing information</span></a>
+<a class="sourceLine" id="cb1-82" data-line-number="82">  }  <span class="co"># end for nn</span></a>
+<a class="sourceLine" id="cb1-83" data-line-number="83">  <span class="kw">names</span>(pat) &lt;-<span class="st"> </span><span class="kw">paste</span>(<span class="st">&quot;pat&quot;</span>, <span class="dv">1</span><span class="op">:</span>nmax, <span class="dt">sep =</span> <span class="st">&quot;&quot;</span>)</a>
+<a class="sourceLine" id="cb1-84" data-line-number="84">  <span class="kw">names</span>(pbt) &lt;-<span class="st"> </span><span class="kw">paste</span>(<span class="st">&quot;pbt&quot;</span>, <span class="dv">1</span><span class="op">:</span>nmax, <span class="dt">sep =</span> <span class="st">&quot;&quot;</span>)</a>
+<a class="sourceLine" id="cb1-85" data-line-number="85">  <span class="kw">names</span>(pt) &lt;-<span class="st"> </span><span class="kw">paste</span>(<span class="st">&quot;pt&quot;</span>, <span class="dv">1</span><span class="op">:</span>nmax, <span class="dt">sep =</span> <span class="st">&quot;&quot;</span>)</a>
+<a class="sourceLine" id="cb1-86" data-line-number="86">  <span class="kw">names</span>(qat) &lt;-<span class="st"> </span><span class="kw">paste</span>(<span class="st">&quot;qat&quot;</span>, <span class="dv">1</span><span class="op">:</span>nmax, <span class="dt">sep =</span> <span class="st">&quot;&quot;</span>)</a>
+<a class="sourceLine" id="cb1-87" data-line-number="87">  <span class="kw">names</span>(qbt) &lt;-<span class="st"> </span><span class="kw">paste</span>(<span class="st">&quot;qbt&quot;</span>, <span class="dv">1</span><span class="op">:</span>nmax, <span class="dt">sep =</span> <span class="st">&quot;&quot;</span>)</a>
+<a class="sourceLine" id="cb1-88" data-line-number="88">  <span class="kw">names</span>(qt) &lt;-<span class="st"> </span><span class="kw">paste</span>(<span class="st">&quot;qt&quot;</span>, <span class="dv">1</span><span class="op">:</span>nmax, <span class="dt">sep =</span> <span class="st">&quot;&quot;</span>)</a>
+<a class="sourceLine" id="cb1-89" data-line-number="89">  <span class="kw">return</span>(<span class="kw">list</span>(<span class="dt">pat =</span> pat, <span class="dt">pbt =</span> pbt, <span class="dt">pt =</span> pt, <span class="dt">qat =</span> qat, <span class="dt">qbt =</span> qbt,</a>
+<a class="sourceLine" id="cb1-90" data-line-number="90">              <span class="dt">qt =</span> qt))</a>
+<a class="sourceLine" id="cb1-91" data-line-number="91">} <span class="co"># end function crossrunauto</span></a></code></pre></div>
+<p>There is a wrapper <code>crossrunautocorr</code> in which <code>changeprob</code> is replaced by an argument <code>autocorr</code> for the autocorrelatiuon parameter k. Note, however, that not all values of k are possible. Specifically, the lowest possible value of k is … Usually positive autocorrelations</p>
+</div>
+<div id="checking-results-by-simulation" class="section level2">
+<h2>Checking results by simulation</h2>
+<p>The crossrun function <code>simclauto</code> stores results of a number of simulations in the model in a data.frame. Arguments are sereis length <code>nser</code>, number of simulations <code>nsim</code>, and the same arguments <code>prob</code> for success probability and <code>changeprob</code> for the unrestricted change probability. The code is as follows:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">clf &lt;-<span class="st"> </span><span class="cf">function</span>(seri, <span class="dt">type=</span><span class="dv">0</span>) {</a>
+<a class="sourceLine" id="cb2-2" data-line-number="2">  rleser &lt;-<span class="st"> </span><span class="kw">rle</span>(seri)<span class="op">$</span>lengths</a>
+<a class="sourceLine" id="cb2-3" data-line-number="3">  <span class="cf">if</span> (type<span class="op">==</span><span class="dv">0</span>) res &lt;-<span class="st"> </span><span class="kw">length</span>(rleser) <span class="op">-</span><span class="st"> </span><span class="dv">1</span></a>
+<a class="sourceLine" id="cb2-4" data-line-number="4">  <span class="cf">if</span> (type<span class="op">==</span><span class="dv">1</span>) res &lt;-<span class="st"> </span><span class="kw">max</span>(rleser)</a>
+<a class="sourceLine" id="cb2-5" data-line-number="5">  <span class="kw">return</span>(res)</a>
+<a class="sourceLine" id="cb2-6" data-line-number="6">} <span class="co"># end auxiliary function clf</span></a>
+<a class="sourceLine" id="cb2-7" data-line-number="7">simclauto &lt;-<span class="st"> </span><span class="cf">function</span> (<span class="dt">nser =</span> <span class="dv">100</span>, <span class="dt">nsim =</span> <span class="fl">1e+05</span>, <span class="dt">prob=</span><span class="fl">0.5</span>, <span class="dt">changeprob=</span><span class="fl">0.4</span>) {</a>
+<a class="sourceLine" id="cb2-8" data-line-number="8">  <span class="cf">if</span> (prob<span class="op">&gt;=</span><span class="fl">0.5</span>) {</a>
+<a class="sourceLine" id="cb2-9" data-line-number="9">    upprob &lt;-<span class="st"> </span>changeprob</a>
+<a class="sourceLine" id="cb2-10" data-line-number="10">    downprob &lt;-<span class="st"> </span>(<span class="dv">1</span><span class="op">-</span>prob)<span class="op">*</span>upprob<span class="op">/</span>prob</a>
+<a class="sourceLine" id="cb2-11" data-line-number="11">  } <span class="cf">else</span> {</a>
+<a class="sourceLine" id="cb2-12" data-line-number="12">    downprob &lt;-<span class="st"> </span>changeprobm</a>
+<a class="sourceLine" id="cb2-13" data-line-number="13">    upprob &lt;-<span class="st"> </span>prob<span class="op">*</span>upprob<span class="op">/</span>(<span class="dv">1</span><span class="op">-</span>prob)</a>
+<a class="sourceLine" id="cb2-14" data-line-number="14">  } <span class="co"># end setting downprob and upprob</span></a>
+<a class="sourceLine" id="cb2-15" data-line-number="15">  un &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="kw">matrix</span>(stats<span class="op">::</span><span class="kw">runif</span>(nser<span class="op">*</span>nsim), <span class="dt">nrow=</span>nsim))</a>
+<a class="sourceLine" id="cb2-16" data-line-number="16">  series &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="kw">matrix</span>(<span class="kw">rep</span>(<span class="dv">0</span>,nser<span class="op">*</span>nsim), <span class="dt">nrow=</span>nsim))</a>
+<a class="sourceLine" id="cb2-17" data-line-number="17">  series[,<span class="dv">1</span>] &lt;-<span class="st"> </span><span class="kw">as.numeric</span>(un[,<span class="dv">1</span>]<span class="op">&lt;=</span>prob)</a>
+<a class="sourceLine" id="cb2-18" data-line-number="18">  <span class="cf">for</span> (nr <span class="cf">in</span> <span class="dv">2</span><span class="op">:</span>nser) series[,nr] &lt;-<span class="st"> </span>series[,nr<span class="dv">-1</span>]<span class="op">*</span>(un[,nr]<span class="op">&gt;=</span>downprob) <span class="op">+</span></a>
+<a class="sourceLine" id="cb2-19" data-line-number="19"><span class="st">    </span>(<span class="dv">1</span><span class="op">-</span>series[,nr<span class="dv">-1</span>])<span class="op">*</span>(un[,nr]<span class="op">&lt;=</span>upprob)</a>
+<a class="sourceLine" id="cb2-20" data-line-number="20">  res &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="kw">matrix</span>(<span class="kw">rep</span>(<span class="ot">NA</span>, <span class="dv">2</span><span class="op">*</span>nsim), <span class="dt">nrow =</span> nsim))</a>
+<a class="sourceLine" id="cb2-21" data-line-number="21">  <span class="kw">names</span>(res) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;nc&quot;</span>, <span class="st">&quot;lr&quot;</span>)</a>
+<a class="sourceLine" id="cb2-22" data-line-number="22">  res[,<span class="dv">1</span>] &lt;-<span class="st"> </span><span class="kw">apply</span>(series, <span class="dv">1</span>, clf, <span class="dt">type=</span><span class="dv">0</span>)</a>
+<a class="sourceLine" id="cb2-23" data-line-number="23">  res[,<span class="dv">2</span>] &lt;-<span class="st"> </span><span class="kw">apply</span>(series, <span class="dv">1</span>, clf, <span class="dt">type=</span><span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb2-24" data-line-number="24">  <span class="kw">return</span>(res)</a>
+<a class="sourceLine" id="cb2-25" data-line-number="25">} <span class="co"># end function simclauto</span></a></code></pre></div>
+<p>As an example the joint distribution is computed for <code>nmax=100, p=0.6</code> and <code>u=0.5</code></p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">cra100.<span class="fl">6.</span>u<span class="fl">.5</span> &lt;-<span class="st"> </span><span class="kw">crossrunauto</span>(<span class="dt">nmax=</span><span class="dv">100</span>, <span class="dt">prob=</span><span class="fl">0.6</span>, <span class="dt">changeprob=</span>.<span class="dv">5</span>)<span class="op">$</span>pt</a></code></pre></div>
+<p>and then compareed with simulations. The cumulative distribution functions based on the joint distributions are shown with black while the cumulative distribution functions from 100.000 simulations are shown in red.</p>
+<p><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAq4AAAFQCAMAAABJUQzAAAAAUVBMVEUAAAAAADoAAGYAOjoAOpAAZrY6AAA6ADo6Ojo6kNtmAABmtv+QOgCQZgCQ2/+2ZgC2/7a2///bkDrb////AAD/tmb/trb/25D//7b//9v///+nEoBCAAAACXBIWXMAAA7DAAAOwwHHb6hkAAAJ8klEQVR4nO3dAXObNhyGcdLV2epm9eqFxfH3/6BDCGI3NTYC6S9e6fndtevtepEhTxUZMDRnQEaT+wUA85ErhJArhJArhJArhJArhJArhJArhJArhJArhJArhJArhJArhJArhJArhJArhJArhJArhJArhJArhJArhJArhJArhJArhJArhJArhJArhJArhJArhJArhJArhJArhJArhJArhJArhJArhJArhJArhJArhJArhJArhJArhJArhJArhJArhJArhJArhJArhJArhJArhJArhJArhJArhJArhJArhJArhJArhJArhJArhJArhJArhJArhJArhJArhJArhJArhJArhJArhJArhJArhJArhJArhJArhJArhJArhJArhJArhETOtQEWyJVr3C+HOpArhJArhJArhJArhBjnGv4WD9vWNK+vaX7dHG32y4q3hQm+HFL49RjS7ayMX1H0v5jlyyGi5pLi9a8tIFdcZJkxQ5ArHD+j5n4VD5Fr7TY/o14j14ppzKjXyLVSOjPqNXKtkGaqDrnWRjZVh1yrorZW/Yxc6zFxYlMJuVaiW6/mfgkRkGsNpNer18i1fOLr1WvkWrgyFgEjci1aKYuAEbkWTP9IwGfkWqpi3l5dI9cylTex9hLlemia3ftL0zTfo3w5hClyZnXS5Hr8+m9X7O58Pu2/RfhyCFLozOokyfX9pYu0ffpx9uGu/XIIUezM6iTJ9bTv1gDtl5/n8fd1Xw7zFTyzOsyuRSl5ZnUSr137cFd/OcxT+NR65shASQqfWR2OuxajglrJtRTlLwSc1LkeOTJgooap9cwdCAtRSa0sBkpQzz9+ctVXy9R6TpZrfxCrM7FyJdeIKqo11WmCZjg70DacJkirnoWAk+4krMdJ2LRKP+v6SbpLXDwucUmprqn1zOwqrb6dmGrtOkyvrF3TKfrC1gmJjgyc9v7IwMTcSq7rVbkHOe6qqbpVq0eukmpcCDjkqqjavUeugoq67VUQ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" /><!-- --></p>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+<p>The means and standard deviations of C and L, and the mean of <span class="math inline">\(C \cdot L\)</span> are also compared with simulations, with only minor discrepancies.</p>
+</div>
+<div id="references" class="section level2">
+<h2>References</h2>
+<p>Refer to the <code>crossrun</code> url <a href="https://CRAN.R-project.org/package=crossrun" class="uri">https://CRAN.R-project.org/package=crossrun</a> with the vignette, and the planned article when published.</p>
+</div>
+
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
